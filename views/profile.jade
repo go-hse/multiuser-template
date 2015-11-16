@@ -1,0 +1,15 @@
+extends layout
+block content
+	div.container
+		h1 Profile
+		div.row
+			div.content.col-xs-6.well I'm on the left
+			div.content.col-xs-6.well I'm on the right
+
+			if (user.local.email)
+				p= user.local.email
+
+block scripts			
+	script(src='default.js')
+
+	

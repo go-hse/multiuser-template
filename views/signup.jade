@@ -1,0 +1,26 @@
+  // The main layout
+extends layout
+
+// The local content
+block content
+	div.container
+		h1 Form
+		div.row
+			div.content.col-md-6.well 
+				form(action='/signup', method='POST', role='form')
+					legend Please sign up
+					.form-group
+						label(for='') Sign Up
+						input.form-control(type='text', placeholder='your email', name='email')
+						input.form-control(type='password', placeholder='your password', name='password')
+					button.btn.btn-primary(type='submit', value='Log In') Submit 
+				
+			div.content.col-md-6.well 
+				p Already have an account?
+				a(href="/login") Local Login
+				a(href="/") Home
+
+block scripts			
+	script(src='default.js')
+
+	
