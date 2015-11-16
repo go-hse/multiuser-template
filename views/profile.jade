@@ -1,15 +1,12 @@
+// The main layout
 extends layout
+
+// The local content
 block content
-	div.container
-		h1 Profile
-		div.row
-			div.content.col-xs-6.well I'm on the left
-			div.content.col-xs-6.well I'm on the right
-
-			if (user.local.email)
-				p= user.local.email
-
+	div.column
+		article
+			if (user.email)
+					p= user.email
 block scripts			
-	script(src='default.js')
 
-	
+		

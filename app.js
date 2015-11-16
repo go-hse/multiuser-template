@@ -14,12 +14,11 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var session = require('express-session');
-
+var flash = require('connect-flash');
 
 
 GLOBAL.searchpaths = (function(mod) {
 	var searchdirs = [
-		path.resolve(__dirname, "public/js"),
 		path.resolve(__dirname, "server_modules"),
 	];
 	// module is not global!
@@ -35,10 +34,10 @@ GLOBAL.searchpaths(module);
 var logFuncs = require('log');
 logFuncs.setErrorLevel(4); // all Output
 var moduleName = "Server]:";
-var errorLog = logFuncs.xlog("[Error in " + moduleName, "FgWhite", "BgRed", 0);
+//var errorLog = logFuncs.xlog("[Error in " + moduleName, "FgWhite", "BgRed", 0);
 var warningLog = logFuncs.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
 var infoLog = logFuncs.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
-var dbgLog = logFuncs.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
+//var dbgLog = logFuncs.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
 
 
 infoLog('Running on platform ' + os.platform() + " type: " + os.type());
@@ -67,9 +66,11 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 })); // session secret
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
+app.use(express.static(__dirname + '/public'));
 
 /******************************************************************************
 	 public directories

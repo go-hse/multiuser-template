@@ -1,29 +1,28 @@
 doctype html
 html
 	head
-		link(rel='stylesheet', media='screen', href='http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css')
 		link(rel='stylesheet', href='css/style.css' )
-		script(src='http://code.jquery.com/jquery.js')
-		script(src='http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
 		title= title
+		meta(charset="UTF-8")
+		meta(name="description", content="HTML Template")
+		meta(name="keywords", content="HTML,CSS,JavaScript")
+		meta(name="author", content="Andreas Roessler, HS Esslingen")
 	body
-		nav.navbar.navbar-inverse(role="navigation")
-			div.navbar-header
-				a(href="/").navbar-brand Andreas Roessler
-				button.navbar-toggle(type="button" data-toggle="collapse" data-target="#bs-navbar-collapse-1")
-					span.sr-only Toggle navigation
-					span.icon-bar
-					span.icon-bar
-					span.icon-bar
-			div.collapse.navbar-collapse#bs-navbar-collapse-1
-				ul.nav.navbar-nav
-					-each val, key in links
-						-if (id == key)
-							li.active
-								a(href='#{key}') #{val}
-						-else            
-							li
-								a(href='#{key}') #{val}
-		block content
-		p!= message
+		header
+			h2 Job Kiosk
+		section#content
+			nav
+				-each val, key in links
+					-if (id == key)
+						div.activebutton
+							a(href='#{key}') #{val}
+					-else            
+						div.button
+							a(href='#{key}') #{val}
+			block content
+		footer
+			div.centercontent
+				a(href='/impressum') Impressum
+		script(src='js/lib.js')
+		script(src='js/realtime.js')
 		block scripts

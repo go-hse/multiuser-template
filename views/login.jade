@@ -1,22 +1,25 @@
-  // The main layout
+// The main layout
 extends layout
 
 // The local content
 block content
-	div.container
-		div.row
-			div.content.col-md-6.well 
-				form(action='/login', method='POST', role='form')
-					legend Please login
-					.form-group
-						label(for='') Login
-						input.form-control(type='text', placeholder='your email', name='email')
-						input.form-control(type='password', placeholder='your password', name='password')
-					button.btn.btn-primary(type='submit', value='Log In') Submit 
-				
-			div.content.col-md-6.well I'm on the right
-
+	div.column
+		p  #{message} 
+		article
+			form(action='/login', method='POST', role='form')
+				div
+					label(class='field')
+					span Please log in
+				div
+					p.required
+						label(class='field' for='email') Email
+						input(type='text', id='email', pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", placeholder='anna@mustermann.de' required, name='email')
+					p.required
+						label(class='field' for='password') Password
+						input(type='password', id='password' , placeholder='your password', name='password')
+				div
+					label(class='field')
+					button(type='submit', value='Log In') Submit 
 block scripts			
-	script(src='default.js')
 
-	
+		

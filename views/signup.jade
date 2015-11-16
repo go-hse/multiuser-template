@@ -1,26 +1,28 @@
-  // The main layout
+// The main layout
 extends layout
 
 // The local content
 block content
-	div.container
-		h1 Form
-		div.row
-			div.content.col-md-6.well 
-				form(action='/signup', method='POST', role='form')
-					legend Please sign up
-					.form-group
-						label(for='') Sign Up
-						input.form-control(type='text', placeholder='your email', name='email')
-						input.form-control(type='password', placeholder='your password', name='password')
-					button.btn.btn-primary(type='submit', value='Log In') Submit 
-				
-			div.content.col-md-6.well 
-				p Already have an account?
-				a(href="/login") Local Login
-				a(href="/") Home
-
+	div.column
+		p  #{message} 
+		article
+			form(action='/signup', method='POST', role='form')
+				div
+					label(class='field')
+					span Please sign up
+				div
+					p.required
+						label(class='field' for='email') Email
+						input(type='text', id='email', pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", placeholder='anna@mustermann.de' required, name='email')
+					p.required
+						label(class='field' for='password') Password
+						input(type='password', id='password' , placeholder='your password', name='password')
+					p.required
+						label(class='field' for='password2') Repeat Password
+						input(type='password', id='password2' , placeholder='repeat your password', name='password2')
+				div
+					label(class='field')
+					button(type='submit', value='Log In') Submit 
 block scripts			
-	script(src='default.js')
 
 	

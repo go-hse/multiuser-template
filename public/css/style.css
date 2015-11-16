@@ -16,17 +16,51 @@ body {
 }
 
 header, footer {
-    background: #fff;
-    flex: 0 0 100px;
+    background: #aaa;
+    flex: 0 0 60px;
     padding: 10px;
 }
 
-button {
+nav {
+    background: #aaa;
+    flex: 0 0 100px;
+}
+
+p.required:after {
+    content: " *";
+}
+
+
+/*  Desktop Mode    */
+label.field {
+    display: inline-block;
+    text-align: right;
+    width: 180px;
+    margin-right: 5px;
+}
+
+
+.button {
 	margin: 10px;
 	padding: 5px;
 	width: 80px;
 	height: 30px;
 	font-size: 1.0em;
+    background: #aaa;
+}
+
+.activebutton {
+    margin: 10px;
+    padding: 5px;
+    width: 80px;
+    height: 30px;
+    font-size: 1.0em;
+    background: #fff;
+}
+
+.centercontent {
+   display: flex;  
+   justify-content: center;
 }
 
 
@@ -38,25 +72,6 @@ section {
     flex-wrap: wrap;
 }
 
-.project {
-    background: #ddd;
-    flex: 1 0 200px;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.filenode {
-    background: #ddd;
-    flex: 1;
-}
-
-.buttons {
-    display: flex;
-    background: #fff;
-    flex: 0 0 auto;
-}
-
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     header, footer {
@@ -66,6 +81,3 @@ section {
     }
 }
 
-.radio {
-    margin: 10px;
-}
