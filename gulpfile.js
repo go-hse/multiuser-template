@@ -44,12 +44,12 @@
 	gulp.task('jasmine', function () {
 		return gulp.src([specs])
 		.pipe(debug({title: 'jasmine:'}))
-		.pipe(jasmine());
+		.pipe(jasmine( {verbose: true} ));
 	});
 
 
 	// Default Task
-	gulp.task('default', ['jshint', 'watch', 'servermonitor', 'browsermonitor']);
+	gulp.task('default', ['jshint', 'watch', 'servermonitor', 'browsermonitor', 'jasmine']);
 
 }());
 

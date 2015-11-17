@@ -22,6 +22,7 @@ para.title = 'Home';
 var insideLinks = {
 	'/logout': 'Logout',
 	'/profile': 'Profile',
+	'/fileupload': 'Upload Job',
 };
 
 var outsideLinks = {
@@ -68,7 +69,7 @@ module.exports = function(app, passport, maindir) {
 			req.pipe(req.busboy);
 			req.busboy.on('file', function(fieldname, file, filename) {
 				dbgLog("Uploading: " + filename);
-				fstream = fs.createWriteStream(maindir + '/files/' + filename);
+				fstream = fs.createWriteStream(maindir + '/userfiles/' + filename);
 				file.pipe(fstream);
 				fstream.on('close', function() {
 					res.redirect('back');

@@ -15,6 +15,8 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var session = require('express-session');
 var flash = require('connect-flash');
+var busboy = require('connect-busboy'); //middleware for form/file upload
+
 
 
 GLOBAL.searchpaths = (function(mod) {
@@ -59,6 +61,7 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 
 app.set('views', './views');
 app.set('view engine', 'jade');
+app.use(busboy());		// important for file uploads
 
 // required for passport
 app.use(session({

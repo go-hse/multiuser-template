@@ -9,7 +9,7 @@ log.setErrorLevel(5);
 
 var moduleName = "users]:";
 var errorLog = log.xlog("[Error in " + moduleName, "FgWhite", "BgRed", 0);
-var warningLog = log.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
+// var warningLog = log.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
 var infoLog = log.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
 var dbgLog = log.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
 
@@ -60,13 +60,18 @@ function Users(url) {
 	that.userModel = userModel;
 
 	that.clearDB = function() {
-		that.userModel.remove({}, function(err) {
-			console.log('collection removed')
+		that.userModel.remove({}, function() {
+			console.log('collection removed');
+		});
+	};
+
+	that.findById = function(id, cb){
+		userModel.findById(id, function(err, user) {
+			cb(err, user);
 		});
 	};
 
 	that.updateUser = function(obj, cb) {
-		cb = cb || function(res) {};
 		userModel.findOne({
 			email: obj.email
 		}, function(err, doc) {
@@ -95,24 +100,72 @@ function Users(url) {
 		});
 	};
 
-	that.addUser = function(obj, cb) {
-		dbgLog("Add ", obj.email);
+	that.login = function(email, password, cb) {
+		if (typeof email !== 'string' || email.length < 5) {
+			cb({
+				'error': true,
+				'message': 'Wrong email',
+				'user': null
+			});
+			return;
+		}
 
-		var newUser = new userModel();
-		newUser.email = obj.email;
-		newUser.password = newUser.generateHash(obj.password);
-		newUser.save(function(err) {
-			if (err) {
-				errorLog('Could not add user ', obj.email);
+		email = email.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
+		userModel.findOne({
+			'email': email
+		}, function(err, user) {
+			if (err || !user) {
 				cb({
 					'error': true,
-					'message': 'Could not add user ' + obj.email
+					'message': 'Wrong user',
+					'user': null
 				});
 			} else {
-				dbgLog("Added ", obj.email);
+				if (!user.validPassword(password)) {
+					cb({
+						'error': true,
+						'message': 'Wrong password',
+						'user': null
+					});
+				} else {
+					cb({
+						'error': false,
+						'message': 'Correct password',
+						'user': user
+					});
+				}
+			}
+		});
+	};
+
+	that.addUser = function(email, password, cb) {
+		if (typeof email !== 'string' || email.length < 5) {
+			cb({
+				'error': true,
+				'message': 'Wrong email',
+				'user': null
+			});
+			return;
+		}
+
+		dbgLog("Add ", email);
+
+		var newUser = new userModel();
+		newUser.email = email.toLowerCase();
+		newUser.password = newUser.generateHash(password);
+		newUser.save(function(err) {
+			if (err) {
+				errorLog('Could not add user ', email);
+				cb({
+					'error': true,
+					'message': 'Could not add user ' + email
+				});
+			} else {
+				dbgLog("Added ", email);
 				cb({
 					'error': false,
-					'message': 'Added user ' + obj.email
+					'message': 'Added user ' + email,
+					'user': newUser
 				});
 			}
 		});
