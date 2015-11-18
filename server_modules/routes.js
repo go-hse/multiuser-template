@@ -37,6 +37,9 @@ para.message = "Test";
 
 module.exports = function(app, passport, maindir) {
 
+	var userInterface = require('usermodel')(); // access the singleton 
+	var fileInterface = require('filehandler')();
+
 	app.use(function(req, res, next) {
 		para.id = req.url; // used in layout.jade to determine the active menu
 		next(); // do not stop here
@@ -54,6 +57,7 @@ module.exports = function(app, passport, maindir) {
 	// PROFILE SECTION =========================
 	app.get('/profile', isLoggedIn, function(req, res) {
 		para.user = req.user;
+		fileInterface.addUserDir(req.user.email);
 		res.render('profile', para);
 	});
 
@@ -64,16 +68,21 @@ module.exports = function(app, passport, maindir) {
 			para.title = 'File';
 			res.render('fileupload', para);
 		})
-		.post(function(req, res) {
+		.post(isLoggedIn, function(req, res) {
 			var fstream;
 			req.pipe(req.busboy);
 			req.busboy.on('file', function(fieldname, file, filename) {
-				dbgLog("Uploading: " + filename);
-				fstream = fs.createWriteStream(maindir + '/userfiles/' + filename);
-				file.pipe(fstream);
-				fstream.on('close', function() {
+				if (req && req.user && req.user.email) {
+					var filepath = fileInterface.addFile(req.user.email, filename);
+					fstream = fs.createWriteStream(filepath);
+					file.pipe(fstream);
+					fstream.on('close', function() {
+						fileInterface.PDF2PNG(filepath);
+						res.redirect('back');
+					});
+				} else {
 					res.redirect('back');
-				});
+				}
 			});
 		});
 

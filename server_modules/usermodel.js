@@ -20,6 +20,7 @@ function Users(url) {
 	var userModel = null;
 
 	var mongooseDB = mongoose.createConnection(url);
+	infoLog('connecting db with', url);
 	mongooseDB.on('error', console.error.bind(console, 'connection error:'));
 
 	mongooseDB.once('open', function() {
@@ -70,6 +71,19 @@ function Users(url) {
 			cb(err, user);
 		});
 	};
+
+
+	that.addJobFile = function(id, filename, cb){
+		userModel.findById(id, function(err, user) {
+			if (err) {
+
+			} else {
+				
+			}
+			cb(err, user);
+		});
+	};
+
 
 	that.updateUser = function(obj, cb) {
 		userModel.findOne({
@@ -174,5 +188,18 @@ function Users(url) {
 	return that;
 }
 
+function UserInterface() {
+	var singleton = null;
 
-module.exports = Users;
+	return function(url) {
+		if (singleton === null) {
+			singleton = Users(url);
+		} else {
+			infoLog('UserInterface exists');
+		}
+		return singleton;
+	}
+}
+
+
+module.exports = UserInterface();

@@ -39,7 +39,11 @@ function xlog(title, fg, bg, level) {
 		if (currentErrorLevel > level) {
 			var msg = '';
 			for(var idx=0; idx<arguments.length; ++idx) {
-				msg += arguments[idx] + " ";
+				var arg = arguments[idx];
+				if (typeof arg === 'object') {
+					arg = JSON.stringify(arg);
+				}
+				msg += arg + " ";
 			}
 			console.log(f, b, title, msg, r);
 		}

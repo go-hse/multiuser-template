@@ -33,6 +33,9 @@ GLOBAL.searchpaths = (function(mod) {
 
 GLOBAL.searchpaths(module);
 
+require('filehandler')(__dirname);
+
+
 var logFuncs = require('log');
 logFuncs.setErrorLevel(4); // all Output
 var moduleName = "Server]:";
