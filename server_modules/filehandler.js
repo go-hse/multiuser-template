@@ -62,12 +62,13 @@ function FileHandler(maindir) {
 		};
 	}
 
+
 	that.PDF2PNG = function(filename) {
 		var proc;
-
+		// we use ImageMagick "convert"-command for conversion from PDF to PNG
 		if (process.env.IMGMAG) {
 			infoLog('ImageMagic Converter', process.env.IMGMAG);
-			proc = spawn(process.env.IMGMAG, ['-verbose -density 92 -trim', filename, filename+'.png']);
+			proc = spawn(process.env.IMGMAG, ['-density', '300', '-quality', '100', '-flatten', filename, filename+'.png']);
 			proc.stdout.setEncoding('utf8');
 			proc.stderr.setEncoding('utf8');
 			proc.stdin.setEncoding('utf-8');
