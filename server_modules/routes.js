@@ -20,6 +20,7 @@ para.title = 'Home';
 // Links in key/value form
 // key is the route; value is the title
 var insideLinks = {
+	'/': 'Home',
 	'/logout': 'Logout',
 	'/profile': 'Profile',
 	'/fileupload': 'Upload Job',
@@ -41,15 +42,34 @@ module.exports = function(app, passport, maindir) {
 	var fileInterface = require('filehandler')();
 
 	app.use(function(req, res, next) {
+		var sess = req.session;
+		if (sess.views) {
+			sess.views++;
+		} else {
+			sess.views = 1
+		}
+
+		if (req.isAuthenticated()) {
+			para.auth = "Authenticated";
+		} else {
+			para.auth = "Not Authenticated";
+		}
+
 		para.id = req.url; // used in layout.jade to determine the active menu
+		para.views = sess.views;
+
 		next(); // do not stop here
 	});
-
 
 	// normal routes ===============================================================
 
 	// show the home page (will also have our login links)
 	app.get('/', function(req, res) {
+		if (req.isAuthenticated()) {
+			para.links = insideLinks;
+		} else {
+			para.links = outsideLinks;
+		}
 		res.render('home', para);
 	});
 
@@ -60,6 +80,14 @@ module.exports = function(app, passport, maindir) {
 		fileInterface.addUserDir(req.user.email);
 		res.render('profile', para);
 	});
+
+	// PROFILE SECTION =========================
+	app.get('/jobs', isLoggedIn, function(req, res) {
+		para.user = req.user;
+		fileInterface.addUserDir(req.user.email);
+		res.render('profile', para);
+	});
+
 
 	// Test on command-line
 	// curl -F "image=@/home/adr/Tmp/link.txt" localhost:8080/fileupload
@@ -127,23 +155,6 @@ module.exports = function(app, passport, maindir) {
 		failureFlash: true // allow flash messages
 	}));
 
-
-	// =============================================================================
-	// UNLINK ACCOUNTS =============================================================
-	// =============================================================================
-	// used to unlink accounts. for social accounts, just remove the token
-	// for local account, remove email and password
-	// user account will stay active in case they want to reconnect in the future
-
-	// local -----------------------------------
-	app.get('/unlink/local', isLoggedIn, function(req, res) {
-		var user = req.user;
-		user.local.email = undefined;
-		user.local.password = undefined;
-		user.save(function() {
-			res.redirect('/profile');
-		});
-	});
 };
 
 // route middleware to ensure user is logged in

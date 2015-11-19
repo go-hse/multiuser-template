@@ -14,18 +14,14 @@ var infoLog = log.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
 var dbgLog = log.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
 
 
-function Users(url) {
+function Users() {
 	"use strict";
 	var that = {};
 	var userModel = null;
 
-	var mongooseDB = mongoose.createConnection(url);
-	infoLog('connecting db with', url);
-	mongooseDB.on('error', console.error.bind(console, 'connection error:'));
+	var mongooseDB = require('db_connection')();
 
-	mongooseDB.once('open', function() {
-		infoLog('db', url, 'is open');
-	});
+	// var mongooseDB = mongoose.createConnection(url);
 
 	var fields = ['familyname', 'givenname', 'email', 'company', 'department', 'street', 'postcode', 'city', 'countrytxt', 'password', 'resetPasswordToken', 'resetPasswordExpires'];
 	var schema = {};
@@ -44,6 +40,7 @@ function Users(url) {
 	schema.resetPasswordToken.required = false;
 	schema.resetPasswordExpires.type = 'Date';
 	schema.resetPasswordExpires.required = false;
+	schema.jobs = [{_id: String}];
 
 	var userSchema = new mongoose.Schema(schema);
 
@@ -66,19 +63,19 @@ function Users(url) {
 		});
 	};
 
-	that.findById = function(id, cb){
+	that.findById = function(id, cb) {
 		userModel.findById(id, function(err, user) {
 			cb(err, user);
 		});
 	};
 
 
-	that.addJobFile = function(id, filename, cb){
+	that.addJobFile = function(id, filename, cb) {
 		userModel.findById(id, function(err, user) {
 			if (err) {
 
 			} else {
-				
+
 			}
 			cb(err, user);
 		});
@@ -189,14 +186,13 @@ function Users(url) {
 }
 
 function UserInterface() {
+	"use strict";
 	var singleton = null;
 
 	return function(url) {
 		if (singleton === null) {
 			singleton = Users(url);
-		} else {
-			infoLog('UserInterface exists');
-		}
+		} 
 		return singleton;
 	}
 }

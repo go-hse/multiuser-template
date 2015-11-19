@@ -17,6 +17,7 @@ var session = require('express-session');
 var flash = require('connect-flash');
 var busboy = require('connect-busboy'); //middleware for form/file upload
 
+var MongoStore = require('connect-mongo')(session);
 
 
 GLOBAL.searchpaths = (function(mod) {
@@ -46,15 +47,10 @@ var infoLog = logFuncs.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
 
 
 infoLog('Running on platform ' + os.platform() + " type: " + os.type());
-infoLog('NODE_PATH:' + process.env.NODE_PATH);
 
-/******************************************************************************
- * Static pages under public http://localhost:8080 default: index.html
- *
- */
-
-require('passport_auth')(passport); // pass passport for configuration
-
+// open DB first; needed for both auth and session
+var mongooseDB = require('db_connection')('mongodb://localhost:27017/jobkiosk');
+require('passport_auth')(passport);
 
 var app = express();
 app.use(bodyParser.json()); // to support JSON-encoded bodies
@@ -64,25 +60,32 @@ app.use(bodyParser.urlencoded({ // to support URL-encoded bodies
 
 app.set('views', './views');
 app.set('view engine', 'jade');
-app.use(busboy());		// important for file uploads
+app.use(busboy()); // important for file uploads
+
+app.use(express.static(__dirname + '/public'));
 
 // required for passport
 app.use(session({
-	secret: 'thisishsesslingen.de',
 	resave: true,
-	saveUninitialized: true
+	saveUninitialized: true,
+	secret: 'thisishsesslingen.de',
+	cookie: {
+		maxAge: 360000
+	},
+	store: new MongoStore({ mongooseConnection: mongooseDB })
 })); // session secret
+
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
-app.use(express.static(__dirname + '/public'));
 
 /******************************************************************************
 	 public directories
  */
 
-require('routes.js')(app, passport, __dirname); // load our routes and pass in our app and fully configured passport
+require('routes')(app, passport, __dirname); // load our routes and pass in our app and fully configured passport
+require('api')(app); // load our API
 
 
 if (env === 'development') {
@@ -103,5 +106,5 @@ require('reloader')(server, port);
 	The server is listening
  */
 server.listen(port, function() {
-	infoLog('is listening on port ' + port + ' on ' + process.platform);
+	infoLog('is listening on port ' + port);
 });

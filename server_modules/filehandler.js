@@ -20,7 +20,7 @@ var dbgLog = log.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
 
 function FileHandler(maindir) {
 	var that = {};
-	infoLog('FileHandler:', maindir);
+	// infoLog('FileHandler:', maindir);
 
 	that.getMainDir = function() {
 		return maindir;
@@ -29,7 +29,7 @@ function FileHandler(maindir) {
 	that.addFile = function(userid, filename) {
 		var dir = path.join(maindir, 'userfiles', userid);
 		var full = path.join(dir, filename);
-		dbgLog("FileHandler:addFile ", full);
+		// dbgLog("FileHandler:addFile ", full);
 		return full;
 	};
 
@@ -40,27 +40,11 @@ function FileHandler(maindir) {
 				fs.mkdir(dir, function(err) {
 					if (err) {
 						errorLog('Error in addUserDir', err);
-					} else {
-						infoLog('created user dir:', dir);
-					}
+					} 
 				});
-			} else {
-				infoLog('user', userid, 'has dir since ', stats.mtime);
-			}
+			} 
 		});
 	};
-
-
-	function d2s(type, data) {
-		var str = data.toString();
-		var lines = str.split(/(\r?\n)/g);
-		for (var i = 0; i < lines.length; ++i) {
-			var trimmed = lines[i].trim();
-			if (trimmed.length > 0) {
-				infoLog(type, trimmed);
-			}
-		};
-	}
 
 
 	that.PDF2PNG = function(filename) {
@@ -69,17 +53,6 @@ function FileHandler(maindir) {
 		if (process.env.IMGMAG) {
 			infoLog('ImageMagic Converter', process.env.IMGMAG);
 			proc = spawn(process.env.IMGMAG, ['-density', '300', '-quality', '100', '-flatten', filename, filename+'.png']);
-			proc.stdout.setEncoding('utf8');
-			proc.stderr.setEncoding('utf8');
-			proc.stdin.setEncoding('utf-8');
-
-			proc.stdout.on('data', function(data) {
-				d2s("PDF2PNG", data);
-			});
-
-			proc.stderr.on('data', function(data) {
-				d2s("PDF2PNG err:", data);
-			});
 		} else {
 			infoLog('env IMGMAG is not defined');
 		}
@@ -94,9 +67,7 @@ function FileHandlerInterface() {
 	return function(maindir) {
 		if (singleton === null) {
 			singleton = FileHandler(maindir);
-		} else {
-			infoLog('FileHandlerInterface uses', singleton.getMainDir());
-		}
+		} 
 		return singleton;
 	}
 }

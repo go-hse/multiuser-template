@@ -12,9 +12,8 @@ var warningLog = logFuncs.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
 var infoLog = logFuncs.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
 //var dbgLog = logFuncs.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
 
-
 var LocalStrategy = require('passport-local').Strategy;
-var userInterface = require('usermodel')('mongodb://localhost:27017/jobkiosk');
+var userInterface = require('usermodel')();
 
 module.exports = function(passport) {
 

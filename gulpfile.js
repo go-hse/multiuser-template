@@ -16,9 +16,9 @@
 	// var pubjs = 'public/js/*.js';
 	var specs = 'spec/*.js';
 
-	var jsdirs = ['*.js', 'server_modules/*.js', 'public/js/*.js', 'server_modules/routes/*.js', specs];
+	var jsdirs = ['*.js', 'server_modules/*.js', 'public/js/*.js', 'server_modules/routes/*.js'];
 	var serverfiles = ['app*.js', 'server_modules/*.js', 'server_modules/routes/*.js'];
-	var clientfiles = ['public/**/*', 'spec/*.html',  'views/*.jade', specs];
+	var clientfiles = ['public/**/*', 'spec/*.html',  'views/*.jade'];
 
 	// configure the jshint task
 	gulp.task('jshint', function() {
@@ -41,6 +41,12 @@
 	 	gulp.watch(jsdirs, ['jshint', 'jasmine']);
 	});
 
+
+	// Watch Files For Changes
+	gulp.task('testwatch', function () {
+	 	gulp.watch(specs, ['jasmine']);
+	});
+
 	gulp.task('jasmine', function () {
 		return gulp.src([specs])
 		.pipe(debug({title: 'jasmine:'}))
@@ -49,7 +55,7 @@
 
 
 	// Default Task
-	gulp.task('default', ['jshint', 'watch', 'servermonitor', 'browsermonitor', 'jasmine']);
+	gulp.task('default', ['jshint', 'watch', 'servermonitor', 'browsermonitor', 'testwatch']);
 
 }());
 

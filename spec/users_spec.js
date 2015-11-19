@@ -18,9 +18,12 @@ GLOBAL.searchpaths = (function(mod) {
 
 GLOBAL.searchpaths(module);
 
+
 // this is the library to be tested
 // has a different URL; uses mongoose.connection
-var userInterface = require('usermodel')('mongodb://localhost:27017/users');
+require('db_connection')('mongodb://localhost:27017/test');
+var userInterface = require('usermodel')();
+
 
 describe("Testing User DB: ", function() {
 
