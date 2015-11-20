@@ -4,12 +4,11 @@
 'use strict';
 GLOBAL.searchpaths(module);
 
-var logFuncs = require('log');
-logFuncs.setErrorLevel(4); // all Output
-var moduleName = "Passport]:";
+// var logFuncs = require('log');
+// var moduleName = "Passport]:";
 //var errorLog = logFuncs.xlog("[Error in " + moduleName, "FgWhite", "BgRed", 0);
-var warningLog = logFuncs.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
-var infoLog = logFuncs.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
+// var warningLog = logFuncs.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
+// var infoLog = logFuncs.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
 //var dbgLog = logFuncs.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
 
 var LocalStrategy = require('passport-local').Strategy;

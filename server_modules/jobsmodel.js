@@ -4,12 +4,10 @@ var mongoose = require('mongoose');
 
 GLOBAL.searchpaths(module);
 var log = require('log');
-log.setErrorLevel(5);
-
 var moduleName = "jobs]:";
 var errorLog = log.xlog("[Error in " + moduleName, "FgWhite", "BgRed", 0);
 // var warningLog = log.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
-var infoLog = log.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
+// var infoLog = log.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
 var dbgLog = log.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
 
 
@@ -79,7 +77,7 @@ function JobsInterface() {
 			singleton = Jobs();
 		}
 		return singleton;
-	}
+	};
 }
 
 

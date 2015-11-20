@@ -45,14 +45,23 @@ function xlog(title, fg, bg, level) {
 				}
 				msg += arg + " ";
 			}
-			console.log(f, b, title, msg, r);
+			console.log(f, b, currentErrorLevel, title, msg, r);
 		}
 	};
 }
 
+var dbgLog = xlog("[LOG", "FgBlack", "BgYellow", 0);
+
+
 module.exports.setErrorLevel = function(level) {
+	dbgLog("set error level to", level);
 	currentErrorLevel = level;
 };
+
+module.exports.getErrorLevel = function() {
+	dbgLog("error level is", currentErrorLevel);
+};
+
 module.exports.colors = colors;
 module.exports.xlog = xlog;
 

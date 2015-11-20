@@ -18,6 +18,8 @@ GLOBAL.searchpaths = (function(mod) {
 
 GLOBAL.searchpaths(module);
 
+var logFuncs = require('log');
+logFuncs.setErrorLevel(0); // all Output
 
 // this is the library to be tested
 // has a different URL; uses mongoose.connection
@@ -99,7 +101,6 @@ describe("Testing User DB: ", function() {
 		beforeEach(function(done) {
 			userInterface.addUser("test@test.de", "gF34sdf#56", function(o) {
 				userInterface.login("test@test.de", "gF34sdf#56", function(obj) {
-					console.log('Correct login', obj.message, obj.error);
 					result = obj;
 					done();
 				});

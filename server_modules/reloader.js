@@ -3,8 +3,6 @@ GLOBAL.searchpaths(module);
 var realtime = require('realtime');
 var browser = require('browser');
 var log = require('log');
-log.setErrorLevel(5);
-
 var moduleName = "reloader]:";
 //var errorLog = log.xlog("[Error in " + moduleName, "FgWhite", "BgRed", 0);
 //var warningLog = log.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);

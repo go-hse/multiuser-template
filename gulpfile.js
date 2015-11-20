@@ -50,7 +50,7 @@
 	gulp.task('jasmine', function () {
 		return gulp.src([specs])
 		.pipe(debug({title: 'jasmine:'}))
-		.pipe(jasmine( {verbose: true} ));
+		.pipe(jasmine( {verbose: false} ));
 	});
 
 

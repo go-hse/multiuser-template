@@ -7,12 +7,12 @@ var fs = require('fs');
 
 GLOBAL.searchpaths(module);
 
-var logFuncs = require('log');
-var moduleName = "Routes]:";
+// var logFuncs = require('log');
+//var moduleName = "Routes]:";
 // var errorLog = logFuncs.xlog("[Error in " + moduleName, "FgWhite", "BgRed", 0);
-//var warningLog = logFuncs.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
-var infoLog = logFuncs.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
-var dbgLog = logFuncs.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
+// var warningLog = logFuncs.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
+// var infoLog = logFuncs.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
+// var dbgLog = logFuncs.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
 
 var para = {};
 para.title = 'Home';
@@ -36,9 +36,9 @@ para.links = outsideLinks;
 para.message = "Test";
 
 
-module.exports = function(app, passport, maindir) {
+module.exports = function(app, passport) {
 
-	var userInterface = require('usermodel')(); // access the singleton 
+	// var userInterface = require('usermodel')(); // access the singleton 
 	var fileInterface = require('filehandler')();
 
 	app.use(function(req, res, next) {
@@ -46,7 +46,7 @@ module.exports = function(app, passport, maindir) {
 		if (sess.views) {
 			sess.views++;
 		} else {
-			sess.views = 1
+			sess.views = 1;
 		}
 
 		if (req.isAuthenticated()) {
@@ -105,7 +105,8 @@ module.exports = function(app, passport, maindir) {
 					fstream = fs.createWriteStream(filepath);
 					file.pipe(fstream);
 					fstream.on('close', function() {
-						fileInterface.PDF2PNG(filepath);
+						fileInterface.PDF2PNG(filepath, 300);
+						fileInterface.PDF2PNG(filepath, 72);
 						res.redirect('back');
 					});
 				} else {

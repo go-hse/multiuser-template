@@ -20,7 +20,7 @@ var busboy = require('connect-busboy'); //middleware for form/file upload
 var MongoStore = require('connect-mongo')(session);
 
 
-GLOBAL.searchpaths = (function(mod) {
+GLOBAL.searchpaths = (function() {
 	var searchdirs = [
 		path.resolve(__dirname, "server_modules"),
 	];

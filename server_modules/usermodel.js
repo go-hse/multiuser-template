@@ -5,14 +5,14 @@ var bcrypt = require('bcrypt-nodejs');
 
 GLOBAL.searchpaths(module);
 var log = require('log');
-log.setErrorLevel(5);
 
 var moduleName = "users]:";
 var errorLog = log.xlog("[Error in " + moduleName, "FgWhite", "BgRed", 0);
 // var warningLog = log.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
-var infoLog = log.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
+// var infoLog = log.xlog("[Info in " + moduleName, "FgGreen", "BgBlack", 2);
 var dbgLog = log.xlog("[Debug " + moduleName, "FgBlue", "BgWhite", 3);
 
+log.getErrorLevel();
 
 function Users() {
 	"use strict";
@@ -59,7 +59,7 @@ function Users() {
 
 	that.clearDB = function() {
 		that.userModel.remove({}, function() {
-			console.log('collection removed');
+			dbgLog('collection removed');
 		});
 	};
 
@@ -72,38 +72,39 @@ function Users() {
 
 	that.addJobFile = function(id, filename, cb) {
 		userModel.findById(id, function(err, user) {
+			/*
 			if (err) {
 
 			} else {
 
 			}
+			*/
 			cb(err, user);
 		});
 	};
 
 
-	that.updateUser = function(obj, cb) {
-		userModel.findOne({
-			email: obj.email
-		}, function(err, doc) {
+	that.updateUser = function(id, obj, cb) {
+		userModel.findById(id, function(err, doc) {
 			if (err) {
 				that.addUser(obj, cb);
 			} else {
 				for (var i = 0; i < fields.length; ++i) {
 					var key = fields[i];
 					doc[key] = obj[key] || doc[key];
+					dbgLog('update', key, 'to', doc[key]);
 				}
 				doc.save(function(err) {
 					if (err) {
-						errorLog('Could not update ', obj.email);
+						errorLog('Could not update ', doc.email);
 						cb({
 							'error': true,
-							'message': 'Could not update ' + obj.email
+							'message': 'Could not update ' + doc.email
 						});
 					} else {
 						cb({
 							'error': false,
-							'message': 'Updated ' + obj.email
+							'message': 'Updated ' + doc.email
 						});
 					}
 				});
@@ -194,7 +195,7 @@ function UserInterface() {
 			singleton = Users(url);
 		} 
 		return singleton;
-	}
+	};
 }
 
 
