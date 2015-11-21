@@ -67,6 +67,10 @@ function FileHandler(maindir) {
 		}
 	}
 
+	that.PDF2PNGname = function(filename, density) {
+		return filename + '.' + density + '.png';
+	};
+
 
 	that.PDF2PNG = function(filename, density) {
 		var proc;
@@ -74,7 +78,7 @@ function FileHandler(maindir) {
 		// we use ImageMagick "convert"-command for conversion from PDF to PNG
 		if (process.env.IMGMAG) {
 			infoLog('ImageMagic Converter', process.env.IMGMAG);
-			var target = filename + '.' + density + '.png';
+			var target = that.PDF2PNGname(filename, density);
 			proc = spawn(process.env.IMGMAG, ['-density', density, '-quality', '100', '-flatten', filename, target]);
 			proc.stdout.setEncoding('utf8');
 			proc.stderr.setEncoding('utf8');

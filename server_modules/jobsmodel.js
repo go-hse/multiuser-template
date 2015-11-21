@@ -17,7 +17,7 @@ function Jobs() {
 	var mongooseDB = require('db_connection')();
 
 	var jobSchema = new mongoose.Schema({
-		title: String,
+		jobtitle: String,
 		creator: {
 			type: String,
 			required: true

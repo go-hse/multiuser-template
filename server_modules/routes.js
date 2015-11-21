@@ -3,11 +3,9 @@
 
 'use strict';
 
-var fs = require('fs');
-
 GLOBAL.searchpaths(module);
 
-// var logFuncs = require('log');
+//var logFuncs = require('log');
 //var moduleName = "Routes]:";
 // var errorLog = logFuncs.xlog("[Error in " + moduleName, "FgWhite", "BgRed", 0);
 // var warningLog = logFuncs.xlog("[Warning " + moduleName, "FgRed", "BgWhite", 1);
@@ -23,6 +21,7 @@ var insideLinks = {
 	'/': 'Home',
 	'/logout': 'Logout',
 	'/profile': 'Profile',
+	'/jobs': 'Jobs',
 	'/fileupload': 'Upload Job',
 };
 
@@ -81,40 +80,12 @@ module.exports = function(app, passport) {
 		res.render('profile', para);
 	});
 
-	// PROFILE SECTION =========================
+	// JOBS SECTION =========================
 	app.get('/jobs', isLoggedIn, function(req, res) {
 		para.user = req.user;
 		fileInterface.addUserDir(req.user.email);
-		res.render('profile', para);
+		res.render('jobs', para);
 	});
-
-
-	// Test on command-line
-	// curl -F "image=@/home/adr/Tmp/link.txt" localhost:8080/fileupload
-	app.route('/fileupload')
-		.get(isLoggedIn, function(req, res) {
-			para.title = 'File';
-			res.render('fileupload', para);
-		})
-		.post(isLoggedIn, function(req, res) {
-			var fstream;
-			req.pipe(req.busboy);
-			req.busboy.on('file', function(fieldname, file, filename) {
-				if (req && req.user && req.user.email) {
-					var filepath = fileInterface.addFile(req.user.email, filename);
-					fstream = fs.createWriteStream(filepath);
-					file.pipe(fstream);
-					fstream.on('close', function() {
-						fileInterface.PDF2PNG(filepath, 300);
-						fileInterface.PDF2PNG(filepath, 72);
-						res.redirect('back');
-					});
-				} else {
-					res.redirect('back');
-				}
-			});
-		});
-
 
 	// LOGOUT ==============================
 	app.get('/logout', function(req, res) {

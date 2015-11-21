@@ -20,6 +20,7 @@ function Users() {
 	var userModel = null;
 
 	var mongooseDB = require('db_connection')();
+	var jobsInterface = require('jobsmodel')();
 
 	// var mongooseDB = mongoose.createConnection(url);
 
@@ -40,7 +41,9 @@ function Users() {
 	schema.resetPasswordToken.required = false;
 	schema.resetPasswordExpires.type = 'Date';
 	schema.resetPasswordExpires.required = false;
-	schema.jobs = [{_id: String}];
+	schema.jobs = [{
+		_id: String
+	}];
 
 	var userSchema = new mongoose.Schema(schema);
 
@@ -81,6 +84,29 @@ function Users() {
 			*/
 			cb(err, user);
 		});
+	};
+
+	that.addJob = function(user, jobobj) {
+		jobsInterface.addJob(user._id, {
+			jobtitle: jobobj.jobtitle,
+			tags: [],
+			fullimage: jobobj.fullimage
+		}, function(job) {
+			user.jobs.push(job._id);
+			user.save(function(err) {
+				if (err) {
+					errorLog('Could not save', jobobj.jobtitle, err);
+				}
+			});
+		});
+	};
+
+	that.removeJob = function(user, jobid) {
+
+	};
+
+	that.getJobs = function(user) {
+
 	};
 
 
@@ -193,7 +219,7 @@ function UserInterface() {
 	return function(url) {
 		if (singleton === null) {
 			singleton = Users(url);
-		} 
+		}
 		return singleton;
 	};
 }
